@@ -4,7 +4,7 @@
 
 ## MERN Stack
 
-- Mongo DB
+- Mongo
 - Express
 - React
 - Node
