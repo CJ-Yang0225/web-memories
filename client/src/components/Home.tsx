@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Container, AppBar, Typography, Grow, Grid } from "@material-ui/core";
-import memories from "./images/memories.png";
-import Posts from "./components/Posts";
-import Form from "./components/Form";
+import memories from "../images/memories.png";
+import PostCardList from "./PostCard";
+import Form from "./Form";
 
 function Home() {
   return (
@@ -18,7 +18,7 @@ function Home() {
         <Container>
           <Grid container justify="space-between" spacing={3}>
             <Grid item xs={12} sm={7}>
-              <Posts />
+              <PostCardList />
             </Grid>
             <Grid item xs={12} sm={4}>
               <Form />
