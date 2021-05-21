@@ -1,0 +1,20 @@
+import mongoose from "mongoose";
+
+const PostSchema = new mongoose.Schema({
+  creator: String,
+  title: String,
+  message: String,
+  selectedFile: String,
+  isFavorite: Boolean,
+  likes: [String],
+  tags: [String],
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
+});
+
+// Mongoose will add 's' to collection name by default
+const PostModel = mongoose.model("Post", PostSchema);
+
+export default PostModel;

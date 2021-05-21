@@ -1,9 +1,9 @@
 import express from "express";
-import { getPosts, createPost } from "../controllers/posts";
+import { getAllPosts, createPost } from "../controllers/posts";
 
 const router = express.Router();
 
-router.get("/", getPosts);
+router.get("/", getAllPosts);
 router.post("/create", createPost);
 router.patch("/:id", () => console.log("do something"));
 
