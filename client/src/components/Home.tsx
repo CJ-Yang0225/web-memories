@@ -17,10 +17,10 @@ function Home() {
       <Grow in>
         <Container>
           <Grid container justify="space-between" spacing={3}>
-            <Grid item xs={12} sm={7}>
+            <Grid item sm={7} xs={12}>
               <PostCardList />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item sm={4} xs={12}>
               <Form />
             </Grid>
           </Grid>
@@ -36,7 +36,7 @@ const Header = styled(AppBar)`
   justify-content: center;
   align-items: center;
   margin: 24px 0;
-  padding: 8px 16px;
+  padding: 16px 24px;
   border-radius: 16px;
 `;
 
