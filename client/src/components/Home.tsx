@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import { Container, AppBar, Typography, Grow, Grid } from "@material-ui/core";
+
 import memories from "../images/memories.png";
-import PostCardList from "./PostCard";
+import PostCardList from "./Post";
 import Form from "./Form";
+import { getAllPosts } from "../actions/posts";
 
 function Home() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, [dispatch]);
+
   return (
     <Container maxWidth="lg">
       <Header position="static" color="inherit">
@@ -17,7 +26,7 @@ function Home() {
       <Grow in>
         <Container>
           <Grid container justify="space-between" spacing={3}>
-            <Grid item sm={7} xs={12}>
+            <Grid item sm={8} xs={12}>
               <PostCardList />
             </Grid>
             <Grid item sm={4} xs={12}>
