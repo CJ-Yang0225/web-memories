@@ -22,18 +22,14 @@ const initialPost = {
   message: "",
   selectedFile: "",
   isFavorite: false,
-  likes: [],
-  tags: [],
+  tags: [""],
 };
 
-const isNotValidValue = (value: any) => {
-  if (typeof value === "string") return value.trim() === "";
-  else return value === "";
-};
+const isNotValidValue = (value: any) => String(value).trim() === "";
 
 function Form(/* { postId, setPostId }: Props */) {
   const [postData, setPostData] = useState(initialPost);
-  const [isDisable, setIsDisable] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
   const dispatch = useDispatch();
 
   const isNotValidForm = useCallback(
@@ -42,7 +38,7 @@ function Form(/* { postId, setPostId }: Props */) {
   );
 
   useEffect(() => {
-    setIsDisable(isNotValidForm());
+    setIsDisabled(isNotValidForm());
   }, [isNotValidForm]);
 
   const clearPostData = () => {
@@ -58,7 +54,7 @@ function Form(/* { postId, setPostId }: Props */) {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-
+    
     setPostData({
       ...postData,
       [name]: value,
@@ -69,8 +65,8 @@ function Form(/* { postId, setPostId }: Props */) {
     <Container>
       <NativeForm
         action="post"
+        noValidate
         autoComplete="off"
-        // noValidate
         onSubmit={handleSubmit}
       >
         <Typography>Creating a Memory</Typography>
@@ -79,7 +75,6 @@ function Form(/* { postId, setPostId }: Props */) {
           variant="outlined"
           label="Creator"
           fullWidth
-          required={true}
           value={postData.creator}
           onChange={handleChange}
         />
@@ -107,7 +102,10 @@ function Form(/* { postId, setPostId }: Props */) {
           label="Tags"
           fullWidth
           value={postData.tags}
-          onChange={handleChange}
+          placeholder="ex: ReactJS,NodeJS"
+          onChange={(event) =>
+            setPostData({ ...postData, tags: event.target.value.split(",") })
+          }
         />
         <FileBox>
           <FileBase
@@ -125,7 +123,7 @@ function Form(/* { postId, setPostId }: Props */) {
           color="primary"
           size="large"
           fullWidth
-          disabled={isDisable}
+          disabled={isDisabled}
         >
           Submit
         </Submit>

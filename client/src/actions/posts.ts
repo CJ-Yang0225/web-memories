@@ -18,10 +18,9 @@ export const getAllPosts = () => async (dispatch: Dispatch) => {
 export type NewPost = {
   creator: string;
   title: string;
-  message?: string;
-  selectedFile?: string;
+  message: string;
+  selectedFile: string;
   isFavorite: boolean;
-  likes: string[];
   tags: string[];
 };
 
