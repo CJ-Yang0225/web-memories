@@ -11,9 +11,11 @@ function PostCardList() {
   console.log(posts);
   return (
     <Grid container spacing={3}>
-      <PostCard />
-      <PostCard />
-      <PostCard />
+      {posts.map((post) => (
+        <Grid key={post._id} item sm={6} md={6} xs={12}>
+          <PostCard post={post} />
+        </Grid>
+      ))}
     </Grid>
   );
 }
