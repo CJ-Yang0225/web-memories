@@ -5,7 +5,6 @@ const TEST_URL = "http://localhost:5000/posts";
 
 export const getAllPosts = () => axios.get(TEST_URL);
 
-export const createPost = (newPost: NewPost) =>
-  axios.post(`${TEST_URL}/create`, newPost);
+export const createPost = (newPost: NewPost) => axios.post(TEST_URL, newPost);
 
 export * from "./types";
