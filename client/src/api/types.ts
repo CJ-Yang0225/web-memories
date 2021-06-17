@@ -2,11 +2,11 @@ export type Post = {
   _id: string;
   creator: string;
   title: string;
-  message?: string;
-  selectedFile?: string;
+  message: string;
+  selectedFile: string;
   isFavorite: boolean;
-  likes?: string[];
-  tags?: string[];
+  likes: string[];
+  tags: string[];
   createdAt: string;
 };
 
