@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "@emotion/styled";
@@ -30,6 +30,7 @@ const isNotValidValue = (value: any) => String(value).trim() === "";
 function Form(/* { postId, setPostId }: Props */) {
   const [postData, setPostData] = useState(initialPost);
   const [isDisabled, setIsDisabled] = useState(true);
+  const formRef = useRef<HTMLFormElement>(null);
   const dispatch = useDispatch();
 
   const isNotValidForm = useCallback(
@@ -43,6 +44,10 @@ function Form(/* { postId, setPostId }: Props */) {
 
   const clearPostData = () => {
     setPostData(initialPost);
+
+    if (formRef.current) {
+      formRef.current.reset(); // clear file input
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -54,7 +59,7 @@ function Form(/* { postId, setPostId }: Props */) {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    
+
     setPostData({
       ...postData,
       [name]: value,
@@ -68,6 +73,7 @@ function Form(/* { postId, setPostId }: Props */) {
         noValidate
         autoComplete="off"
         onSubmit={handleSubmit}
+        ref={formRef}
       >
         <Typography>Creating a Memory</Typography>
         <TextField
