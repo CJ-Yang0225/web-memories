@@ -10,7 +10,7 @@ const PostSchema = new mongoose.Schema({
   tags: [String],
   createdAt: {
     type: Date,
-    default: new Date(),
+    default: new Date().toISOString(),
   },
 });
 
