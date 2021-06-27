@@ -10,17 +10,25 @@ import {
   CardActions,
 } from "@material-ui/core";
 import { Edit } from "@material-ui/icons";
+import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
+import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import { Post } from "../../api";
 
 type Props = {
   post: Post;
+  onSelect: (id: string) => void;
 };
 
 const defaultImage =
   "https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png";
 
-function PostCard({ post }: Props) {
+function PostCard({ post, onSelect: emitSelect }: Props) {
+  const handleEdit = () => {
+    emitSelect(post._id);
+  };
+
   return (
     <Container>
       <Thumbnail image={post.selectedFile || defaultImage} title={post.title} />
@@ -31,16 +39,14 @@ function PostCard({ post }: Props) {
         </Typography>
       </Overlay>
       <Overlay top="16px" right="16px">
-        <Button style={{ color: "white" }}>
+        <Button style={{ color: "white" }} onClick={handleEdit}>
           <Edit />
         </Button>
       </Overlay>
       <TagBox>
-        <Typography
-          variant="body2"
-          color="textSecondary"
-          component="h2"
-        >{post.tags.map(tag => `#${tag} `)}</Typography>
+        <Typography variant="body2" color="textSecondary" component="h2">
+          {post.tags.map((tag) => `#${tag} `)}
+        </Typography>
       </TagBox>
       <Title variant="h5" component="h2">
         {post.title}
@@ -50,7 +56,16 @@ function PostCard({ post }: Props) {
           {post.message}
         </Typography>
       </CardContent>
-      <CardActions></CardActions>
+      <ActionBar>
+        <Button size="medium" color="primary">
+          <ThumbUpAltIcon fontSize="small" />
+          &nbsp;Like
+        </Button>
+        <Button size="medium" color="secondary">
+          <DeleteIcon fontSize="small" />
+          &nbsp;Delete
+        </Button>
+      </ActionBar>
     </Container>
   );
 }
@@ -62,10 +77,16 @@ const Container = styled(Card)`
   justify-content: space-between;
   border-radius: 16px;
   height: 100%;
+  transition: all 0.2s linear;
+
+  &:hover {
+    transform: scale(1.0125);
+  }
 `;
 
 const Thumbnail = styled(CardMedia)`
-  padding-top: 56.25%;
+  padding-top: 60%;
+  background-size: contain;
   background-color: rgba(0, 0, 0, 0.5);
   background-blend-mode: darken;
 `;
@@ -104,6 +125,19 @@ const TagBox = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 16px;
+`;
+
+const ActionBar = styled(CardActions)`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 8px;
+
+  button {
+    padding: 8px 0;
+    width: 40%;
+  }
 `;
 
 export default PostCard;
