@@ -1,19 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import { Container, AppBar, Typography, Grow, Grid } from "@material-ui/core";
 
 import memories from "../images/memories.png";
-import PostCardList from "./Post";
+import { PostCardList } from "./Post";
 import Form from "./Form";
 import { getAllPosts } from "../actions/posts";
 
 function Home() {
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllPosts());
   }, [dispatch]);
+
+  console.log("Editing Post:", editingPostId);
 
   return (
     <Container maxWidth="lg">
@@ -25,12 +28,15 @@ function Home() {
       </Header>
       <Grow in>
         <Container>
-          <Grid container justify="space-between" spacing={3}>
+          <Grid container justify="space-between" spacing={2}>
             <Grid item sm={8} xs={12}>
-              <PostCardList />
+              <PostCardList setCurrentPostId={setEditingPostId} />
             </Grid>
             <Grid item sm={4} xs={12}>
-              <Form />
+              <Form
+                postId={editingPostId}
+                setEditingPostId={setEditingPostId}
+              />
             </Grid>
           </Grid>
         </Container>
@@ -44,7 +50,7 @@ const Header = styled(AppBar)`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin: 24px 0;
+  margin: 20px 0;
   padding: 16px 24px;
   border-radius: 16px;
 `;

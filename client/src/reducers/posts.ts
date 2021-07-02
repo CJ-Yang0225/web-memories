@@ -1,17 +1,17 @@
-import { Posts } from "../api";
 import {
   CREATE_POST,
   DELETE_POST,
   GET_ALL_POSTS,
   UPDATE_POST,
-} from "../constants/actionTypes";
+} from "../lib/constants";
+import { Post } from "../types";
 
 type Action = {
   type: string;
   payload: any;
 };
 
-const reducer = (posts: Posts = [], action: Action) => {
+const reducer = (posts: Post[] = [], action: Action) => {
   switch (action.type) {
     case GET_ALL_POSTS:
       return action.payload;

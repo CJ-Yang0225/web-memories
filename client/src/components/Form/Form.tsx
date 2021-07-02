@@ -1,22 +1,24 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "@emotion/styled";
 import { Button, Paper, TextField, Typography } from "@material-ui/core";
 /* @ts-ignore */
 import FileBase from "react-file-base64";
-import { createPost } from "../../actions/posts";
+import { createPost, updatePost } from "../../actions/posts";
+import { RootState } from "../../store";
+import { Post } from "../../types";
 
 type Props = {
-  postId: string;
-  setPostId: (id: string) => void;
+  postId: string | null;
+  setEditingPostId: (id: string | null) => void;
 };
 
 type Base64 = {
   base64: string;
 };
 
-const initialPost = {
+const initialState = {
   creator: "",
   title: "",
   message: "",
@@ -25,43 +27,72 @@ const initialPost = {
   tags: [""],
 };
 
-const isNotValidValue = (value: any) => String(value).trim() === "";
+const isNotValidValue = (value: unknown) => {
+  if (typeof value !== "string") return;
+  return String(value).trim() === "";
+};
 
-function Form(/* { postId, setPostId }: Props */) {
-  const [postData, setPostData] = useState(initialPost);
+function Form({ postId, setEditingPostId }: Props) {
+  const [formData, setFormData] = useState(initialState);
   const [isDisabled, setIsDisabled] = useState(true);
   const formRef = useRef<HTMLFormElement>(null);
   const dispatch = useDispatch();
 
-  const isNotValidForm = useCallback(
-    () => Object.values(postData).some(isNotValidValue),
-    [postData]
+  const post = useSelector((state: RootState) =>
+    state.postsReducer.find((post: Post) => post._id === postId)
   );
+
+  const isNotValidForm = useCallback(
+    () => Object.values(formData).some(isNotValidValue),
+    [formData]
+  );
+
+  useEffect(() => {
+    if (post) {
+      setFormData(post);
+    }
+  }, [post]);
 
   useEffect(() => {
     setIsDisabled(isNotValidForm());
   }, [isNotValidForm]);
 
-  const clearPostData = () => {
-    setPostData(initialPost);
+  const formTitle = postId ? (
+    <>
+      Editing{" "}
+      <span style={{ color: "#00b7ff", fontWeight: "bold" }}>
+        {post?.title}
+      </span>
+    </>
+  ) : (
+    "Creating a Memory"
+  );
+
+  const clearFormData = () => {
+    setFormData(initialState);
+    setEditingPostId(null);
 
     if (formRef.current) {
       formRef.current.reset(); // clear file input
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (postId) {
+      dispatch(updatePost(postId, formData));
+    } else {
+      dispatch(createPost(formData));
+    }
 
-    dispatch(createPost(postData));
-    clearPostData();
+    clearFormData();
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
-    setPostData({
-      ...postData,
+    setFormData({
+      ...formData,
       [name]: value,
     });
   };
@@ -75,13 +106,13 @@ function Form(/* { postId, setPostId }: Props */) {
         onSubmit={handleSubmit}
         ref={formRef}
       >
-        <Typography>Creating a Memory</Typography>
+        <Typography>{formTitle}</Typography>
         <TextField
           name="creator"
           variant="outlined"
           label="Creator"
           fullWidth
-          value={postData.creator}
+          value={formData.creator}
           onChange={handleChange}
         />
         <TextField
@@ -89,7 +120,7 @@ function Form(/* { postId, setPostId }: Props */) {
           variant="outlined"
           label="Title"
           fullWidth
-          value={postData.title}
+          value={formData.title}
           onChange={handleChange}
         />
         <TextField
@@ -99,7 +130,7 @@ function Form(/* { postId, setPostId }: Props */) {
           fullWidth
           multiline
           rows={4}
-          value={postData.message}
+          value={formData.message}
           onChange={handleChange}
         />
         <TextField
@@ -107,10 +138,13 @@ function Form(/* { postId, setPostId }: Props */) {
           variant="outlined"
           label="Tags"
           fullWidth
-          value={postData.tags}
+          value={formData.tags}
           placeholder="ex: ReactJS,NodeJS"
           onChange={(event) =>
-            setPostData({ ...postData, tags: event.target.value.split(",") })
+            setFormData({
+              ...formData,
+              tags: event.target.value.split(","),
+            })
           }
         />
         <FileBox>
@@ -119,7 +153,7 @@ function Form(/* { postId, setPostId }: Props */) {
             type="file"
             multiple={false}
             onDone={({ base64 }: Base64) => {
-              setPostData({ ...postData, selectedFile: base64 });
+              setFormData({ ...formData, selectedFile: base64 });
             }}
           />
         </FileBox>
@@ -131,14 +165,14 @@ function Form(/* { postId, setPostId }: Props */) {
           fullWidth
           disabled={isDisabled}
         >
-          Submit
+          {postId ? "Update" : "Submit"}
         </Submit>
         <Button
           variant="contained"
           color="secondary"
           size="small"
           fullWidth
-          onClick={clearPostData}
+          onClick={clearFormData}
         >
           Clear
         </Button>

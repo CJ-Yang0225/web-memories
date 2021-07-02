@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Request, Response } from "express";
 import PostModel from "../models/Post";
 
@@ -20,4 +21,28 @@ export const createPost = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
+};
+
+export const updatePost = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { creator, title, message, tags, selectedFile, isFavorite } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).send(`No post with id: ${id}`);
+  }
+
+  const editedPost = {
+    creator,
+    title,
+    message,
+    tags,
+    selectedFile,
+    isFavorite,
+  };
+
+  const updatedPost = await PostModel.findByIdAndUpdate(id, editedPost, {
+    new: true,
+  });
+
+  res.json(updatedPost);
 };

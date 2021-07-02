@@ -1,6 +1,7 @@
 import { Dispatch } from "redux";
-import { CREATE_POST, GET_ALL_POSTS } from "../constants/actionTypes";
-import * as api from "../api";
+import { CREATE_POST, GET_ALL_POSTS, UPDATE_POST } from "../lib/constants";
+import * as api from "../lib/api";
+import { FormData } from "../types";
 
 export const getAllPosts = () => async (dispatch: Dispatch) => {
   try {
@@ -15,16 +16,7 @@ export const getAllPosts = () => async (dispatch: Dispatch) => {
   }
 };
 
-export type NewPost = {
-  creator: string;
-  title: string;
-  message: string;
-  selectedFile: string;
-  isFavorite: boolean;
-  tags: string[];
-};
-
-export const createPost = (newPost: NewPost) => async (dispatch: Dispatch) => {
+export const createPost = (newPost: FormData) => async (dispatch: Dispatch) => {
   try {
     const { data } = await api.createPost(newPost);
 
@@ -36,3 +28,15 @@ export const createPost = (newPost: NewPost) => async (dispatch: Dispatch) => {
     console.error(error);
   }
 };
+
+export const updatePost =
+  (id: string, editedPost: FormData) => async (dispatch: Dispatch) => {
+    try {
+      const { data } = await api.updatePost(id, editedPost);
+
+      dispatch({
+        type: UPDATE_POST,
+        payload: data,
+      });
+    } catch (error) {}
+  };

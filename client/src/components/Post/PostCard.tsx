@@ -11,18 +11,23 @@ import {
 } from "@material-ui/core";
 import { Edit } from "@material-ui/icons";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
-import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
+// import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import { Post } from "../../api";
+import { Post } from "../../types";
+import { DEFAULT_IMAGE } from "../../lib/constants";
 
 type Props = {
   post: Post;
   onSelect: (id: string) => void;
 };
 
-const defaultImage =
-  "https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png";
+const checkImage = (base64: string) => {
+  if (base64.indexOf("data:image/") === -1) {
+    return DEFAULT_IMAGE;
+  }
+  return base64;
+};
 
 function PostCard({ post, onSelect: emitSelect }: Props) {
   const handleEdit = () => {
@@ -31,7 +36,7 @@ function PostCard({ post, onSelect: emitSelect }: Props) {
 
   return (
     <Container>
-      <Thumbnail image={post.selectedFile || defaultImage} title={post.title} />
+      <Thumbnail image={checkImage(post.selectedFile)} title={post.title} />
       <Overlay top="16px" left="16px">
         <Typography variant="h6">{post.creator}</Typography>
         <Typography variant="body2">
@@ -52,7 +57,7 @@ function PostCard({ post, onSelect: emitSelect }: Props) {
         {post.title}
       </Title>
       <CardContent>
-        <Typography variant="body2" component="p">
+        <Typography noWrap variant="body2" component="p" title={post.message}>
           {post.message}
         </Typography>
       </CardContent>
@@ -85,7 +90,7 @@ const Container = styled(Card)`
 `;
 
 const Thumbnail = styled(CardMedia)`
-  padding-top: 60%;
+  padding-top: 50%;
   background-size: contain;
   background-color: rgba(0, 0, 0, 0.5);
   background-blend-mode: darken;
