@@ -1,3 +1,2 @@
-import PostCardList from "./PostCardList";
-
-export default PostCardList;
+export { default as PostCardList } from "./PostCardList";
+export { default as PostCard } from "./PostCard";

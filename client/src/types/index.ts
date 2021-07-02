@@ -3,11 +3,18 @@ export type Post = {
   creator: string;
   title: string;
   message: string;
+  tags: string[];
   selectedFile: string;
   isFavorite: boolean;
   likes: string[];
-  tags: string[];
   createdAt: string;
 };
 
-export type Posts = Post[];
+export type FormData = {
+  creator: string;
+  title: string;
+  message: string;
+  tags: string[];
+  selectedFile: string;
+  isFavorite: boolean;
+};
