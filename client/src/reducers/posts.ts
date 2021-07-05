@@ -25,7 +25,7 @@ const reducer = (posts: Post[] = [], action: Action) => {
       );
 
     case DELETE_POST:
-      return posts.find((post) => post !== action.payload._id);
+      return posts.filter((post) => post._id !== action.payload);
 
     default:
       return posts;

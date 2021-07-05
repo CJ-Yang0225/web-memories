@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import moment from "moment";
 import styled from "@emotion/styled";
 import {
@@ -16,6 +17,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import { Post } from "../../types";
 import { DEFAULT_IMAGE } from "../../lib/constants";
+import { deletePost } from "../../actions/posts";
 
 type Props = {
   post: Post;
@@ -30,6 +32,8 @@ const checkImage = (base64: string) => {
 };
 
 function PostCard({ post, onSelect: emitSelect }: Props) {
+  const dispatch = useDispatch();
+
   const handleEdit = () => {
     emitSelect(post._id);
   };
@@ -66,7 +70,11 @@ function PostCard({ post, onSelect: emitSelect }: Props) {
           <ThumbUpAltIcon fontSize="small" />
           &nbsp;Like
         </Button>
-        <Button size="medium" color="secondary">
+        <Button
+          size="medium"
+          color="secondary"
+          onClick={() => dispatch(deletePost(post._id))}
+        >
           <DeleteIcon fontSize="small" />
           &nbsp;Delete
         </Button>
@@ -86,6 +94,7 @@ const Container = styled(Card)`
 
   &:hover {
     transform: scale(1.0125);
+    box-shadow: 2px 4px 4px 1px rgba(0, 0, 0, 0.3);
   }
 `;
 
