@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import styled from "@emotion/styled";
 
 import PostCard from "./PostCard";
 import { Grid, CircularProgress } from "@material-ui/core";
@@ -22,22 +23,14 @@ function PostCardList({ setCurrentPostId }: Props) {
 
   return (
     <Grid container spacing={2}>
-      {isLoading ? (
-        <>
-          <CircularProgress
-            style={{
-              marginLeft: "calc((100% - 64px)/2)",
-              marginTop: "2rem",
-              width: "48px",
-              height: "48px",
-            }}
-          />
-        </>
-      ) : (
-        renderPosts()
-      )}
+      {isLoading ? <ProgressSpinner /> : renderPosts()}
     </Grid>
   );
 }
+
+const ProgressSpinner = styled(CircularProgress)`
+  margin-left: calc((100% - 40px) / 2);
+  margin-top: 16px;
+`;
 
 export default PostCardList;

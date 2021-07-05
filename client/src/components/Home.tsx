@@ -16,8 +16,6 @@ function Home() {
     dispatch(getAllPosts());
   }, [dispatch]);
 
-  console.log("Editing Post:", editingPostId);
-
   return (
     <Container maxWidth="lg">
       <Header position="static" color="inherit">
