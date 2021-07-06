@@ -6,7 +6,7 @@ export type Post = {
   tags: string[];
   selectedFile: string;
   isFavorite: boolean;
-  likes: string[];
+  likes: number;
   createdAt: string;
 };
 
