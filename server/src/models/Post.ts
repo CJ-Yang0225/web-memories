@@ -1,16 +1,27 @@
 import mongoose from "mongoose";
 
-const PostSchema = new mongoose.Schema({
+interface Post extends mongoose.Document {
+  creator: string;
+  title: string;
+  message: string;
+  tags: string[];
+  selectedFile: string;
+  isFavorite: boolean;
+  likes: number;
+  createdAt: Date;
+}
+
+const PostSchema = new mongoose.Schema<Post>({
   creator: String,
   title: String,
   message: String,
+  tags: [String],
   selectedFile: String,
   isFavorite: Boolean,
-  likes: { type: [String], default: [] },
-  tags: [String],
+  likes: { type: Number, default: 0 },
   createdAt: {
     type: Date,
-    default: new Date().toISOString(),
+    default: () => new Date().toISOString(),
   },
 });
 
