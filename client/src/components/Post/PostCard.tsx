@@ -57,11 +57,16 @@ function PostCard({ post, onSelect: emitSelect }: Props) {
           {post.tags.map((tag) => `#${tag} `)}
         </Typography>
       </TagBox>
-      <Title variant="h5" component="h2">
+      <Title variant="h5" color="textPrimary" component="h2">
         {post.title}
       </Title>
       <CardContent>
-        <Typography noWrap variant="body2" component="p" title={post.message}>
+        <Typography
+          variant="body2"
+          component="p"
+          title={post.message}
+          style={{ color: "rgba(0, 0, 0, 0.77)", overflowWrap: "break-word" }}
+        >
           {post.message}
         </Typography>
       </CardContent>
