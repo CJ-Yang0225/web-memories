@@ -2,6 +2,7 @@ import {
   CREATE_POST,
   DELETE_POST,
   GET_ALL_POSTS,
+  LIKE_POST,
   UPDATE_POST,
 } from "../lib/constants";
 import { Post } from "../types";
@@ -20,6 +21,7 @@ const reducer = (posts: Post[] = [], action: Action) => {
       return [...posts, action.payload];
 
     case UPDATE_POST:
+    case LIKE_POST:
       return posts.map((post) =>
         post._id === action.payload._id ? action.payload : post
       );

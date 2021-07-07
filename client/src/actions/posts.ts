@@ -4,6 +4,7 @@ import {
   CREATE_POST,
   UPDATE_POST,
   DELETE_POST,
+  LIKE_POST,
 } from "../lib/constants";
 import * as api from "../lib/api";
 import { FormData } from "../types";
@@ -37,11 +38,11 @@ export const createPost = (newPost: FormData) => async (dispatch: Dispatch) => {
 export const updatePost =
   (id: string, editedPost: FormData) => async (dispatch: Dispatch) => {
     try {
-      const { data: post } = await api.updatePost(id, editedPost);
+      const { data: updatedPost } = await api.updatePost(id, editedPost);
 
       dispatch({
         type: UPDATE_POST,
-        payload: post,
+        payload: updatedPost,
       });
     } catch (reason) {
       console.error(reason.message);
@@ -58,5 +59,18 @@ export const deletePost = (id: string) => async (dispatch: Dispatch) => {
     });
   } catch (reason) {
     console.error(reason.message);
+  }
+};
+
+export const likePost = (id: string) => async (dispatch: Dispatch) => {
+  try {
+    const { data: likedPost } = await api.likePost(id);
+
+    dispatch({
+      type: LIKE_POST,
+      payload: likedPost,
+    });
+  } catch (reason) {
+    console.error(reason);
   }
 };

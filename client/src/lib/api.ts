@@ -10,3 +10,6 @@ export const updatePost = (id: string, editedPost: FormData) =>
   axios.patch(`${TEST_URL}/${id}`, editedPost);
 
 export const deletePost = (id: string) => axios.delete(`${TEST_URL}/${id}`);
+
+export const likePost = (id: string) =>
+  axios.patch(`${TEST_URL}/${id}/likeCount`);

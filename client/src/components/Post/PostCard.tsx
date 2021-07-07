@@ -17,7 +17,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import { Post } from "../../types";
 import { DEFAULT_IMAGE } from "../../lib/constants";
-import { deletePost } from "../../actions/posts";
+import { deletePost, likePost } from "../../actions/posts";
 
 type Props = {
   post: Post;
@@ -71,9 +71,13 @@ function PostCard({ post, onSelect: emitSelect }: Props) {
         </Typography>
       </CardContent>
       <ActionBar>
-        <Button size="medium" color="primary">
+        <Button
+          size="medium"
+          color="primary"
+          onClick={() => dispatch(likePost(post._id))}
+        >
           <ThumbUpAltIcon fontSize="small" />
-          &nbsp;Like
+          &nbsp;Like&nbsp;{post.likes}
         </Button>
         <Button
           size="medium"
