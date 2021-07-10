@@ -12,6 +12,7 @@ import { Post } from "../../types";
 type Props = {
   postId: string | null;
   setEditingPostId: (id: string | null) => void;
+  onSubmit: () => void;
 };
 
 type Base64 = {
@@ -32,7 +33,7 @@ const isNotValidValue = (value: unknown) => {
   return String(value).trim() === "";
 };
 
-function Form({ postId, setEditingPostId }: Props) {
+function Form({ postId, setEditingPostId, onSubmit: emitSubmit }: Props) {
   const [formData, setFormData] = useState(initialState);
   const [isDisabled, setIsDisabled] = useState(true);
   const formRef = useRef<HTMLFormElement>(null);
@@ -84,7 +85,7 @@ function Form({ postId, setEditingPostId }: Props) {
     } else {
       dispatch(createPost(formData));
     }
-
+    emitSubmit();
     clearFormData();
   };
 

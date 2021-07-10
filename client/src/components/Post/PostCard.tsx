@@ -10,7 +10,7 @@ import {
   CardContent,
   CardActions,
 } from "@material-ui/core";
-import { Edit } from "@material-ui/icons";
+import { Edit, Star, StarBorder } from "@material-ui/icons";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 // import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -22,6 +22,7 @@ import { deletePost, likePost } from "../../actions/posts";
 type Props = {
   post: Post;
   onSelect: (id: string) => void;
+  onDelete: () => void;
 };
 
 const checkImage = (base64: string) => {
@@ -31,27 +32,43 @@ const checkImage = (base64: string) => {
   return base64;
 };
 
-function PostCard({ post, onSelect: emitSelect }: Props) {
+function PostCard({ post, onSelect: emitSelect, onDelete: emitDelete }: Props) {
   const dispatch = useDispatch();
 
   const handleEdit = () => {
     emitSelect(post._id);
   };
 
+  const handleDelete = () => {
+    emitDelete();
+    dispatch(deletePost(post._id));
+  };
+
   return (
     <Container>
-      <Thumbnail image={checkImage(post.selectedFile)} title={post.title} />
-      <Overlay top="16px" left="16px">
-        <Typography variant="h6">{post.creator}</Typography>
-        <Typography variant="body2">
-          {moment(post.createdAt).fromNow()}
-        </Typography>
-      </Overlay>
-      <Overlay top="16px" right="16px">
-        <Button style={{ color: "white" }} onClick={handleEdit}>
-          <Edit />
-        </Button>
-      </Overlay>
+      <Thumbnail image={checkImage(post.selectedFile)} title={post.title}>
+        <Overlay top="16px" left="16px">
+          <Typography variant="h6" style={{ color: "white" }}>
+            {post.creator}
+          </Typography>
+          <Typography variant="body2" style={{ color: "white" }}>
+            {moment(post.createdAt).fromNow()}
+          </Typography>
+        </Overlay>
+        <Overlay top="12px" right="12px">
+          <Button style={{ color: "white" }} onClick={handleEdit}>
+            <Edit />
+          </Button>
+        </Overlay>
+        <Overlay bottom="12px" left="12px">
+          <Button
+            style={{ color: post.isFavorite ? "yellow" : "white" }}
+            onClick={() => {}}
+          >
+            {post.isFavorite ? <Star /> : <StarBorder />}
+          </Button>
+        </Overlay>
+      </Thumbnail>
       <TagBox>
         <Typography variant="body2" color="textSecondary" component="h2">
           {post.tags.map((tag) => `#${tag} `)}
@@ -79,11 +96,7 @@ function PostCard({ post, onSelect: emitSelect }: Props) {
           <ThumbUpAltIcon fontSize="small" />
           &nbsp;Like&nbsp;{post.likes}
         </Button>
-        <Button
-          size="medium"
-          color="secondary"
-          onClick={() => dispatch(deletePost(post._id))}
-        >
+        <Button size="medium" color="secondary" onClick={handleDelete}>
           <DeleteIcon fontSize="small" />
           &nbsp;Delete
         </Button>
@@ -102,12 +115,13 @@ const Container = styled(Card)`
   transition: all 0.2s linear;
 
   &:hover {
-    transform: scale(1.0125);
+    transform: scale(1.005);
     box-shadow: 2px 4px 4px 1px rgba(0, 0, 0, 0.3);
   }
 `;
 
 const Thumbnail = styled(CardMedia)`
+  position: relative;
   padding-top: 50%;
   background-size: contain;
   background-color: rgba(0, 0, 0, 0.5);
@@ -116,16 +130,18 @@ const Thumbnail = styled(CardMedia)`
 
 type OverlayProps = {
   top?: string;
-  left?: string;
   right?: string;
+  bottom?: string;
+  left?: string;
 };
 
 const Overlay = styled.div<OverlayProps>`
   position: absolute;
   top: ${({ top }) => top};
-  left: ${({ left }) => left};
   right: ${({ right }) => right};
-  color: white;
+  bottom: ${({ bottom }) => bottom};
+  left: ${({ left }) => left};
+  color: #140202;
 
   .MuiButton-root {
     border-radius: 100%;
