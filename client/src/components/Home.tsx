@@ -3,14 +3,17 @@ import { useDispatch } from "react-redux";
 import styled from "@emotion/styled";
 import { Container, AppBar, Typography, Grow, Grid } from "@material-ui/core";
 
-import memories from "../images/memories.png";
+import { memories } from "../assets";
 import { PostCardList } from "./Post";
 import Form from "./Form";
 import { getAllPosts } from "../actions/posts";
+import { useModalState } from "../hooks/useModalState";
+import { Snackbar } from "./Snackbar";
 
 function Home() {
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const dispatch = useDispatch();
+  const formSnackbar = useModalState();
 
   useEffect(() => {
     dispatch(getAllPosts());
@@ -26,7 +29,7 @@ function Home() {
       </Header>
       <Grow in>
         <Container>
-          <Grid container justify="space-between" spacing={2}>
+          <GridContainer container justify="space-between" spacing={2}>
             <Grid item sm={8} xs={12}>
               <PostCardList setCurrentPostId={setEditingPostId} />
             </Grid>
@@ -34,9 +37,15 @@ function Home() {
               <Form
                 postId={editingPostId}
                 setEditingPostId={setEditingPostId}
+                onSubmit={formSnackbar.open}
+              />
+              <Snackbar
+                visible={formSnackbar.isVisible}
+                message="Operated successfully."
+                onClose={formSnackbar.close}
               />
             </Grid>
-          </Grid>
+          </GridContainer>
         </Container>
       </Grow>
     </Container>
@@ -60,6 +69,14 @@ const Title = styled(Typography)`
 
 const Image = styled.img`
   margin-left: 16px;
+`;
+
+const GridContainer = styled(Grid)`
+  position: relative;
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column-reverse;
+  }
 `;
 
 export default Home;
